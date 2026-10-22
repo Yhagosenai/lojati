@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>LojaTI | Tecnologia e Inovação</title>
+
+</head>
+
+<body>
+
+    <header>
+        <a href="#inicio" class="logo">Loja<span>TI</span></a>
+
+        <nav>
+            <a href="#inicio">Início</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#sobre">Quem somos</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+
+    <section class="banner" id="inicio">
+        <div class="banner-conteudo">
+            <h1>
+                Tudo o que você precisa
+                em <span>um só lugar!</span>
+            </h1>
+
+            <p>
+                Produtos e soluções de tecnologia para você,
+                sua empresa ou seu setup.
+            </p>
+
+            <a href="#servicos" class="botao">
+                Conheça nossos serviços →
+            </a>
+        </div>
+    </section>
+
+    <section class="servicos" id="servicos">
+        <h2 class="titulo-secao">
+            Nossos <span>Serviços</span>
+        </h2>
+
+        <p class="subtitulo">
+            Mais que uma loja, somos seu parceiro em tecnologia.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="icone">🔧</div>
+
+                <h3>Manutenção de Computadores</h3>
+
+                <p>
+                    Diagnóstico, limpeza e reparo de computadores
+                    e notebooks para garantir o melhor desempenho.
+                </p>
+
+                <a href="#contato">Saiba mais →</a>
+            </div>
+
+            <div class="card">
+                <div class="icone">🖥️</div>
+
+                <h3>Montagem de PCs</h3>
+
+                <p>
+                    Montamos computadores personalizados para
+                    jogos, estudos e trabalho, conforme sua necessidade.
+                </p>
+
+                <a href="#contato">Saiba mais →</a>
+            </div>
+
+            <div class="card">
+                <div class="icone">🛡️</div>
+
+                <h3>Softwares e Segurança</h3>
+
+                <p>
+                    Instalação de programas, configuração do sistema
+                    e soluções para proteger seus equipamentos.
+                </p>
+
+                <a href="#contato">Saiba mais →</a>
+            </div>
+
+        </div>
+    </section>
+
+        <div class="formulario" id="contato">
+
+            <h3>Cadastre-se / Solicite um orçamento</h3>
+
+            <p>
+                Preencha os dados abaixo para realizar seu cadastro.
+            </p>
+
+            <form id="formCliente">
+
+                <div class="campo">
+                    <label for="nome">Nome completo</label>
+                    <input
+                        type="text"
+                        id="nome"
+                        name="nome"
+                        placeholder="Digite seu nome"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="email">E-mail</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="seuemail@exemplo.com"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="telefone">Telefone</label>
+                    <input
+                        type="tel"
+                        id="telefone"
+                        name="telefone"
+                        placeholder="(12) 99999-9999"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="endereco">Endereço</label>
+                    <textarea
+                        id="endereco"
+                        name="endereco"
+                        placeholder="Rua, número e bairro"
+                        required
+                    ></textarea>
+                </div>
+
+                <button type="submit" class="botao" id="botaoEnviar">
+                    Enviar cadastro →
+                </button>
+
+                <p id="mensagem" role="status" aria-live="polite"></p>
+
+            </form>
+        </div>
+
+    </section>
+
+    <footer>
+        <a href="#inicio" class="logo">Loja<span>TI</span></a>
+
+        <p>
+            © 2026 LojaTI. 
+        </p>
+    </footer>
+
+    <script>
+    const formulario = document.getElementById("formCliente");
+    const mensagem = document.getElementById("mensagem");
+    const botaoEnviar = document.getElementById("botaoEnviar");
+
+    formulario.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        const dados = new FormData(formulario);
+
+        botaoEnviar.disabled = true;
+        botaoEnviar.textContent = "Enviando...";
+
+        try {
+            const resposta = await fetch(
+                "http://localhost/lojati/back/index.php?rota=clientes/create",
+                {
+                    method: "POST",
+                    body: dados
+                }
+            );
+
+            const resultado = await resposta.json();
+
+            if (!resposta.ok || resultado.erro) {
+                throw new Error(
+                    resultado.erro || "Erro ao cadastrar cliente."
+                );
+            }
+
+            // Limpa os campos após o cadastro
+            formulario.reset();
+
+            mensagem.textContent = "Cliente cadastrado com sucesso!";
+            mensagem.style.color = "#4ade80";
+
+        } catch (erro) {
+            mensagem.textContent =
+                "Não foi possível confirmar o cadastro. Verifique o backend.";
+            mensagem.style.color = "#f87171";
+
+            console.error(erro);
+
+        } finally {
+            botaoEnviar.disabled = false;
+            botaoEnviar.textContent = "Enviar cadastro →";
+        }
+    });
+</script>
+</body>
+</html>
